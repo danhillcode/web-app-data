@@ -1,0 +1,12 @@
+<!-- templates/registration/login.html
+http://127.0.0.1:8000/accounts/login/
+
+https://learndjango.com/tutorials/django-login-and-logout-tutorial#:~:text=Django%20by%20default%20will%20look,it%20another%20directory%20called%20registration%20.
+-->
+
+<h2>Log In</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Log In</button>
+</form>

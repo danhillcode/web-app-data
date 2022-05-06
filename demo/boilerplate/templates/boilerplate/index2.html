@@ -1,0 +1,104 @@
+{% extends 'boilerplate/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div>
+<!--You are : <strong>{{name}}</strong>-->
+<!-- You are really : <strong>{{name1}}</strong>-->
+
+<!--<br>-->
+<!-- {% for nam in name1 %}-->
+<!--    {{ nam }} <br>-->
+<!-- {% endfor %}-->
+
+ <h1>This is a page to display student data</h1>
+
+
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>-->
+<!--<canvas id="chart"></canvas>-->
+<!-- <script>let ctx = document.getElementById("chart").getContext("2d");-->
+<!--let chart = new Chart(ctx, {-->
+<!--  type: "bar",-->
+<!--  data: {-->
+<!--   labels: ["2020/Q1", "2020/Q2", "2020/Q3", "2020/Q4"],-->
+<!--   datasets: [-->
+<!--    {-->
+<!--      label: "Gross volume ($)",-->
+<!--      backgroundColor: "#79AEC8",-->
+<!--      borderColor: "#417690",-->
+<!--      data: [26900, 28700, 27300, 29200]-->
+<!--    }-->
+<!--   ]-->
+<!--  },-->
+<!--  options: {-->
+<!--   title: {-->
+<!--    text: "Gross Volume in 2020",-->
+<!--    display: true-->
+<!--   }-->
+<!--  }-->
+<!--});</script>-->
+
+
+
+<!--<script>-->
+<!--    d3.csv('{%  static '7D.csv' %}', function (err, csv) {-->
+<!--        console.log(csv)-->
+<!--    });-->
+<!--</script>-->
+
+<!-- Load d3.js -->
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+<!--<script>-->
+
+<!--// set the dimensions and margins of the graph-->
+<!--var margin = {top: 10, right: 30, bottom: 30, left: 60},-->
+<!--    width = 460 - margin.left - margin.right,-->
+<!--    height = 400 - margin.top - margin.bottom;-->
+
+<!--// append the svg object to the body of the page-->
+<!--var svg = d3.select("#my_dataviz")-->
+<!--  .append("svg")-->
+<!--    .attr("width", width + margin.left + margin.right)-->
+<!--    .attr("height", height + margin.top + margin.bottom)-->
+<!--  .append("g")-->
+<!--    .attr("transform",-->
+<!--          "translate(" + margin.left + "," + margin.top + ")");-->
+
+<!--//Read the data-->
+<!--d3.csv("Users/danielhill/PycharmProjects/web-app-data/demo/data/7D.csv", function(data) {-->
+
+<!--  // Add X axis-->
+<!--  var x = d3.scaleLinear()-->
+<!--    .domain([0, 4000])-->
+<!--    .range([ 0, width ]);-->
+<!--  svg.append("g")-->
+<!--    .attr("transform", "translate(0," + height + ")")-->
+<!--    .call(d3.axisBottom(x));-->
+
+<!--  // Add Y axis-->
+<!--  var y = d3.scaleLinear()-->
+<!--    .domain([0, 500000])-->
+<!--    .range([ height, 0]);-->
+<!--  svg.append("g")-->
+<!--    .call(d3.axisLeft(y));-->
+
+<!--  // Add dots-->
+<!--  svg.append('g')-->
+<!--    .selectAll("dot")-->
+<!--    .data(data)-->
+<!--    .enter()-->
+<!--    .append("circle")-->
+<!--      .attr("cx", function (d) { return x(d.GrLivArea); } )-->
+<!--      .attr("cy", function (d) { return y(d.SalePrice); } )-->
+<!--      .attr("r", 1.5)-->
+<!--      .style("fill", "#69b3a2")-->
+
+<!--})-->
+
+<!--</script>-->
+
+</div>
+{% endblock %}

@@ -2,20 +2,14 @@
 
 {% block content %}
 <div>
- {% for demo in latest_demo_list %}
-  <h1>{{ demo.demo_title }}</h1>
-  <p>{{ demo.demo_description }}</p>
- {% endfor %}
 
 
-<form action="name/" method="post">
+<form action="../scatter/" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit">
 </form>
 
 
-
 </div>
 {% endblock %}
-
