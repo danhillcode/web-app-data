@@ -1,0 +1,16 @@
+{% extends 'boilerplate/base.html' %}
+
+<!--scatter is a generic page that can be used to sort the graphs before complicating the app-->
+
+
+<!--{% load static %}-->
+{% block content %}
+{% load nvd3_tags %}
+<head>
+    {% load_chart charttype chartdata "multibarchart_container" %}
+</head>
+<body>
+    {% include_container "multibarchart_container" 400 600 %}
+</body>
+{% endblock %}
+

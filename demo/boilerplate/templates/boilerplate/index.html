@@ -7,14 +7,25 @@
   <p>{{ demo.demo_description }}</p>
  {% endfor %}
 
+<!--    These are the button that take you to the pages you want -->
 
 <form action="name/" method="post">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Submit">
+    <input type="submit"  value="Student Search" class="btn btn-dark">
 </form>
 
+<form action="scatter/" method="post" class="btn btn-dark">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Class Data Analysis" class="btn btn-dark">
+</form>
 
+    <form action="scatter/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Year Data Analysis" class="btn btn-dark">
+</form>
 
 </div>
 {% endblock %}

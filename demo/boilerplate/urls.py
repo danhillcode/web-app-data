@@ -9,6 +9,9 @@ urlpatterns = [
     path('name/data/', views.index2, name='index2'),
     path('name/', views.get_name, name='get_name'),
     path('scatter/', views.demo_scatter, name='demo_scatter'),
+    path('scatterStudent/', views.scatter_student, name='scatter_student'),
+    path('question/', views.question, name='question'),
+
     # path('tester/', views.test, name='test'),
     path('/login', TemplateView.as_view(template_name='home.html'), name='home'),  # new
 

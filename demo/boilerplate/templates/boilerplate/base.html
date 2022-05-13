@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>A Simple Django Boilerplate</title>
+    <title>Data Analysis</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -13,9 +13,15 @@
 
   </head>
 
-  <body>
+  <body style="background-color:#6699CC; text-align: center;">
+
+<!--  This was added for the login functionality-->
+
+
+
+
     <nav class="navbar navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Header</a>
+      <a class="navbar-brand" href="#">Student Data Analytics</a>
     </nav>
 
     <div class="container-fluid my-5">
@@ -31,6 +37,17 @@
       <p>Main page with options to click through to different tabs for student data</p>
 
     </footer>
+
+    <ul class="sidebar-nav">
+
+   {% if user.is_authenticated %}
+     <li>User: {{ user.get_username }}</li>
+     <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+   {% else %}
+     <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+   {% endif %}
+  </ul>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   </body>
 </html>
