@@ -1,3 +1,4 @@
+from multiprocessing import context
 from wsgiref.util import FileWrapper
 
 from django.conf import settings
@@ -7,7 +8,7 @@ from .models import Demo
 import pandas as pd
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .forms import NameForm
+from .forms import NameForm , CreateUserForm
 from django.shortcuts import render_to_response
 import numpy as np
 
@@ -19,6 +20,28 @@ import time
 This outlines the routes and is basically the controller where data
 is processed and can interact with the views
 '''
+
+# DJango User Authentication
+
+from django.contrib.auth.forms import UserCreationForm 
+
+def registerPage(request):
+    form = CreateUserForm()
+    
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():            
+            form.save()
+    
+    context = {'form':form}
+    return render(request,'registration/register.html',context)
+
+def loginPage(request):
+    return render(request,'registration/login.html')
+
+def logoutUser(request):
+    return render(request,'registration/logged_out.html')
+    
 
 
 def index(request):
