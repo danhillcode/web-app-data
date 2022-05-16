@@ -2,7 +2,7 @@ from multiprocessing import context
 from wsgiref.util import FileWrapper
 
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import Demo
 import pandas as pd
@@ -24,6 +24,11 @@ is processed and can interact with the views
 # DJango User Authentication
 
 from django.contrib.auth.forms import UserCreationForm 
+from django.contrib import messages #error messages for form
+from django.contrib.auth import authenticate, login, logout
+
+
+#from registration form
 
 def registerPage(request):
     form = CreateUserForm()
@@ -32,11 +37,28 @@ def registerPage(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():            
             form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request,f'congratulations {user}, successfully registered') # flash message for successful user registration
+            return redirect('login') #redirecting to login page after form submission
     
     context = {'form':form}
     return render(request,'registration/register.html',context)
 
+
+#data from login page form
 def loginPage(request):
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        #authenticating the request data
+        user = authenticate(request,username = username, password = password) 
+
+        if user is not None:
+            login(request,user)
+            return redirect('/login')  
+
     return render(request,'registration/login.html')
 
 def logoutUser(request):
