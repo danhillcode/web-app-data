@@ -55,15 +55,19 @@ def loginPage(request):
         #authenticating the request data
         user = authenticate(request,username = username, password = password) 
 
+        #if user exists
         if user is not None:
             login(request,user)
-            return redirect('/login')  
+            return redirect('home')  
 
     return render(request,'registration/login.html')
 
 def logoutUser(request):
     return render(request,'registration/logged_out.html')
     
+
+# def home(request):
+
 
 
 def index(request):
