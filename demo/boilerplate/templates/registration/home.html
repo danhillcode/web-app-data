@@ -1,9 +1,11 @@
 <!-- templates/home.html -->
+{% csrf_token %}
 {% extends 'base.html' %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
 {% if user.is_authenticated %}
   Hi {{ user.username }}!
 {% else %}
