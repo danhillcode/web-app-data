@@ -3,7 +3,7 @@ from wsgiref.util import FileWrapper
 
 from django.conf import settings
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Demo
 import pandas as pd
 from django.http import HttpResponseRedirect
@@ -202,8 +202,17 @@ def scatter_student(request):
     # print("session value here:???")
     # print(Demo.objects.all)
 
-    data = pd.read_csv("/Users/danielhill/PycharmProjects/web-app-data/demo/static/Year_7_EOT.csv")
+    data = pd.read_csv("/home/maaz/django-support1/web-app-data/demo/static/Year_7_EOT.csv")
     #name is data but didnt change name1 is actual name
+    
+    #If name exists in csv
+    nameFilter = data['Name'] #copy Name column
+    nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
+    
+    if request.POST['your_name'].replace(" ","") not in nameFilter.unique():
+        return JsonResponse({'message':"Does not exist"})
+    # print(request.POST['your_name'].replace(" ",""))
+    
     name = np.array(data[0:1])
     df = pd.DataFrame(data)
 
