@@ -1,15 +1,53 @@
 {% extends 'boilerplate/base.html' %}
 
 {% block content %}
-<div>
+<div >
+
+    <form action="../scatterStudent/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+
+            {{form.your_name.label_tag}}
+            {{form.your_name}}
+    
+        </div>
+        <div class="form-group">
+
+            {{form.surname.label_tag}}
+            {{form.surname}}
+    
+        </div>
+        <div class="d-flex justify-content-center mt-3 login_container">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    
+      </form>
 
 
+
+
+<!-- 
 <form action="../scatterStudent/" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit" class="btn btn-success">
-</form>
+</form> -->
 
 
 </div>
 {% endblock %}
+<!-- 
+<form>
+    <div class="form-group">
+        {{form.your_name}}
+
+    </div>
+    <div class="form-group">
+        {{form.surname}}
+
+    </div>
+    <div class="d-flex justify-content-center mt-3 login_container">
+        <input class="btn login_btn" type="submit" value="Search">
+    </div>
+
+  </form> -->

@@ -208,8 +208,11 @@ def scatter_student(request):
     #If name exists in csv
     nameFilter = data['Name'] #copy Name column
     nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
+    nameFilter.str.lower() #to lowercase
     
-    if request.POST['your_name'].replace(" ","") not in nameFilter.unique():
+    queryset = request.POST['your_name'].replace(" ","")
+    queryset.lower() #to lowercasae
+    if queryset not in nameFilter.unique():
         return JsonResponse({'message':"Does not exist"})
     # print(request.POST['your_name'].replace(" ",""))
     
