@@ -196,6 +196,7 @@ def demo_scatter(request):
 
 
 
+
 # Finding individual data - work in progress
 def scatter_student(request):
 
@@ -210,46 +211,62 @@ def scatter_student(request):
     nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
     nameFilter.str.lower() #to lowercase
     
-    queryset = request.POST['your_name'].replace(" ","")
-    queryset.lower() #to lowercasae
-    if queryset not in nameFilter.unique():
-        return JsonResponse({'message':"Does not exist"})
-    # print(request.POST['your_name'].replace(" ",""))
+    surnameFilter =  data['Surname']
+    surnameFilter = surnameFilter.str.replace(" ","")
+    surnameFilter.str.lower()
+
     
-    name = np.array(data[0:1])
+    name = request.POST['your_name'].replace(" ","")
+    name.lower()
+    surname = request.POST['surname'].replace(" ","")    
+    surname.lower()
+    
+    #if the name is in request
+    if name not in nameFilter.unique():
+        return JsonResponse({'message':"Does not exist"})
+    
+    #get index of the requested name
+    n = nameFilter[nameFilter == name].index
+    getIndex = np.array(n)
+    getIndex = getIndex[0]
+    #to numpy array
+    n = np.array(n)
+    
+    name = np.array(data[getIndex:getIndex+1])
     df = pd.DataFrame(data)
 
-    columnTitles = df.columns[8:25]
+    columnTitles = data.columns[8:15]
     print(df.columns[8:18])
     # dataSet = np.array(data[0:1])
+    columnTitles = list(columnTitles)
 
 
 
-
-
+# commenting line below
     name1 = name[0]
     data = name[0][8:28]
-
+    print(f'columnTitles \n {list(columnTitles)}')
     # Need to find a way to go across and access all of the scores for one student
-    score = np.array(name[0][8:25]).tolist()
+    #commenting this line
+    score = np.array(name[0][8:15])
+    score = score.astype(float)
+    score  = [0.35,0.15,0.6,0.24,0.2,0.5,0.24]
 
-
-    chartdata = {'x':columnTitles , 'y': score}
-    charttype = "multiBarHorizontalChart"
-    chartcontainer = 'piechart_container'
-    # charttype = "discreteBarChart"
-    # chartcontainer = 'multiBarChart'
+    print(f'score \n {score}')
+    # access all of the scores for one student
+    # score = np.array(data[getIndex][8:25])
+    # extra_serie = {"tooltip": {"y_start": "There are ", "y_end": " calls"}}
+    
+  
+    chartdata = {
+        'x': columnTitles, 'name1': 'Quiz score', 'y1': score,# 'extra1': extra_serie1,
+    }
+    charttype = "multiBarChart"
     data = {
         'charttype': charttype,
         'chartdata': chartdata,
-        # 'chartcontainer': chartcontainer,
-        'extra': {
-            'x_is_date': False,
-            'x_axis_format': '',
-            'tag_script_js': True,
-            'jquery_on_ready': False,
-        }
     }
+    
     return render_to_response('boilerplate/scatterStudent.html',data )
 
 
