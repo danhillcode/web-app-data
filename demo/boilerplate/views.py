@@ -9,7 +9,7 @@ import pandas as pd
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .forms import NameForm , CreateUserForm
-from django.shortcuts import render_to_response
+# from django.shortcuts import render_to_response
 import numpy as np
 
 import random
@@ -192,12 +192,14 @@ def demo_scatter(request):
             'jquery_on_ready': False,
         }
     }
-    return render_to_response('boilerplate/scatter.html', data)
+    return render('boilerplate/scatter.html', data)
 
 
 
 
 # Finding individual data - work in progress
+from chartjs.views.lines import BaseLineChartView
+
 def scatter_student(request):
 
     # print("session value here:???")
@@ -207,49 +209,49 @@ def scatter_student(request):
     #name is data but didnt change name1 is actual name
     
     #If name exists in csv
-    nameFilter = data['Name'] #copy Name column
-    nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
-    nameFilter.str.lower() #to lowercase
+    # nameFilter = data['Name'] #copy Name column
+    # nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
+    # nameFilter.str.lower() #to lowercase
     
-    surnameFilter =  data['Surname']
-    surnameFilter = surnameFilter.str.replace(" ","")
-    surnameFilter.str.lower()
+    # surnameFilter =  data['Surname']
+    # surnameFilter = surnameFilter.str.replace(" ","")
+    # surnameFilter.str.lower()
 
     
-    name = request.POST['your_name'].replace(" ","")
-    name.lower()
-    surname = request.POST['surname'].replace(" ","")    
-    surname.lower()
+    # name = request.POST['your_name'].replace(" ","")
+    # name.lower()
+    # surname = request.POST['surname'].replace(" ","")    
+    # surname.lower()
     
-    #if the name is in request
-    if name not in nameFilter.unique():
-        return JsonResponse({'message':"Does not exist"})
+    # #if the name is in request
+    # if name not in nameFilter.unique():
+    #     return JsonResponse({'message':"Does not exist"})
     
-    #get index of the requested name
-    n = nameFilter[nameFilter == name].index
-    getIndex = np.array(n)
-    getIndex = getIndex[0]
-    #to numpy array
-    n = np.array(n)
+    # #get index of the requested name
+    # n = nameFilter[nameFilter == name].index
+    # getIndex = np.array(n)
+    # getIndex = getIndex[0]
+    # #to numpy array
+    # n = np.array(n)
     
-    name = np.array(data[getIndex:getIndex+1])
-    df = pd.DataFrame(data)
+    # name = np.array(data[getIndex:getIndex+1])
+    # df = pd.DataFrame(data)
 
     columnTitles = data.columns[8:15]
-    print(df.columns[8:18])
+    # print(df.columns[8:18])
     # dataSet = np.array(data[0:1])
     columnTitles = list(columnTitles)
 
 
 
 # commenting line below
-    name1 = name[0]
-    data = name[0][8:28]
-    print(f'columnTitles \n {list(columnTitles)}')
+    # name1 = name[0]
+    # data = name[0][8:28]
+    # print(f'columnTitles \n {list(columnTitles)}')
     # Need to find a way to go across and access all of the scores for one student
     #commenting this line
-    score = np.array(name[0][8:15])
-    score = score.astype(float)
+    # score = np.array(name[0][8:15])
+    # score = score.astype(float)
     score  = [0.35,0.15,0.6,0.24,0.2,0.5,0.24]
 
     print(f'score \n {score}')
@@ -266,13 +268,50 @@ def scatter_student(request):
         'charttype': charttype,
         'chartdata': chartdata,
     }
+    # course_list = ['Computer Science', 'Computer Engineering', 'Software Engineering', 'Computer Security']
+    # number_list = [cs_no, ce_no, se_no, sec_no]
+    # mydict = {
+    #     'df'=df,
+    #     'df1'=df1
+    #  }
+    labels = columnTitles
+    score = score
     
-    return render_to_response('boilerplate/scatterStudent.html',data )
+    context = {
+        "labels": labels, 
+        "datasets": score,
+    }
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+    
+    # return render_to_response('boilerplate/scatterStudent.html',context )
+
+
+# for experiment of chart js
+
+def home(request):
+    return render(request, '/home/maaz/django-support1/web-app-data/demo/boilerplate/templates/boilerplate/home1.html')
 
 
 
+def population_chart(request):
+    data = pd.read_csv("/home/maaz/django-support1/web-app-data/demo/static/Year_7_EOT.csv")
+    
+    labels = list(data.columns[8:25])
+    data = data.iloc[165][8:15].values
+    data = list(data.astype(float))
+    name = 'Ana Sofia'
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+        'text': name,
+        'barLabel': 'Quiz Score'
+    })
 
-
+    
 
 def question(request):
     # latest_demo_list = Demo.objects.all()
