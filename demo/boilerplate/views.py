@@ -198,8 +198,7 @@ def demo_scatter(request):
 
 
 # Finding individual data - work in progress
-from chartjs.views.lines import BaseLineChartView
-
+from django.http import HttpResponseNotFound
 def scatter_student(request):
 
     
@@ -230,26 +229,29 @@ def scatter_student(request):
     
     # #if the name is in request
     if name not in nameFilter.unique():
-        return JsonResponse({'message':"Does not exist"})
+        return HttpResponseNotFound("Student not found")
+        # return JsonResponse({'message':"Does not exist"})
 
     # #get index of the requested name
     n = nameFilter[nameFilter == name].index
     getIndex = np.array(n)
     getIndex = getIndex[0]
-    #to numpy array
-    # n = np.array(n)
     
     
-    labels = list(data.columns[8:15])
-    data = data.iloc[getIndex][8:15].values
-    data = list(data.astype(float))
-    name = 'Ana Sofia'
-   
-    return render(request, 'boilerplate/scatterStudent.html', {
+    
+    labels = list(data.columns[8:]) #col titles
+    score = data.iloc[getIndex][8:].values #qioz scores
+    score = list(score.astype(float)) #converting str to float
+    name = [data['Name'][getIndex]] #name of requeseted student
+
+    
+    dataset = {
         'labels': labels,
-        'data': data,
+        'data': score,
         'studentName' : name #lablel title
-    })
+    }
+
+    return render(request, 'boilerplate/scatterStudent.html',dataset)
 
 
     
