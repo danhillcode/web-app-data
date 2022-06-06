@@ -25,7 +25,4 @@ urlpatterns = [
 	path('logout/', views.logoutUser, name="logout"),
     path('',TemplateView.as_view(template_name='home.html'), name='home'), #Loggedin user or Dashboard
 
-# TESTs =========================================
-    path('home', views.home, name='home'),
-    path('population-chart/', views.population_chart, name='population-chart'),
 ]

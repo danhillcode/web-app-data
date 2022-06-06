@@ -202,16 +202,8 @@ from chartjs.views.lines import BaseLineChartView
 
 def scatter_student(request):
 
-    # print("session value here:???")
-    # print(Demo.objects.all)
-
-    data = pd.read_csv("/home/maaz/django-support1/web-app-data/demo/static/Year_7_EOT.csv")
-    #name is data but didnt change name1 is actual name
     
-    #If name exists in csv
-    # nameFilter = data['Name'] #copy Name column
-    # nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
-    # nameFilter.str.lower() #to lowercase
+   
     
     # surnameFilter =  data['Surname']
     # surnameFilter = surnameFilter.str.replace(" ","")
@@ -223,93 +215,42 @@ def scatter_student(request):
     # surname = request.POST['surname'].replace(" ","")    
     # surname.lower()
     
-    # #if the name is in request
-    # if name not in nameFilter.unique():
-    #     return JsonResponse({'message':"Does not exist"})
     
+    
+    
+    data = pd.read_csv("/home/maaz/django-support1/web-app-data/demo/static/Year_7_EOT.csv")
+    print(request.POST['your_name'])
+    # If name exists in csv
+    nameFilter = data['Name'] #copy Name column
+    nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
+    nameFilter.str.lower() #to lowercase
+    
+    name = request.POST['your_name'].replace(" ","")
+    name.lower()
+    
+    # #if the name is in request
+    if name not in nameFilter.unique():
+        return JsonResponse({'message':"Does not exist"})
+
     # #get index of the requested name
-    # n = nameFilter[nameFilter == name].index
-    # getIndex = np.array(n)
-    # getIndex = getIndex[0]
-    # #to numpy array
+    n = nameFilter[nameFilter == name].index
+    getIndex = np.array(n)
+    getIndex = getIndex[0]
+    #to numpy array
     # n = np.array(n)
     
-    # name = np.array(data[getIndex:getIndex+1])
-    # df = pd.DataFrame(data)
-
-    columnTitles = data.columns[8:15]
-    # print(df.columns[8:18])
-    # dataSet = np.array(data[0:1])
-    columnTitles = list(columnTitles)
-
-
-
-# commenting line below
-    # name1 = name[0]
-    # data = name[0][8:28]
-    # print(f'columnTitles \n {list(columnTitles)}')
-    # Need to find a way to go across and access all of the scores for one student
-    #commenting this line
-    # score = np.array(name[0][8:15])
-    # score = score.astype(float)
-    score  = [0.35,0.15,0.6,0.24,0.2,0.5,0.24]
-
-    print(f'score \n {score}')
-    # access all of the scores for one student
-    # score = np.array(data[getIndex][8:25])
-    # extra_serie = {"tooltip": {"y_start": "There are ", "y_end": " calls"}}
     
-  
-    chartdata = {
-        'x': columnTitles, 'name1': 'Quiz score', 'y1': score,# 'extra1': extra_serie1,
-    }
-    charttype = "multiBarChart"
-    data = {
-        'charttype': charttype,
-        'chartdata': chartdata,
-    }
-    # course_list = ['Computer Science', 'Computer Engineering', 'Software Engineering', 'Computer Security']
-    # number_list = [cs_no, ce_no, se_no, sec_no]
-    # mydict = {
-    #     'df'=df,
-    #     'df1'=df1
-    #  }
-    labels = columnTitles
-    score = score
-    
-    context = {
-        "labels": labels, 
-        "datasets": score,
-    }
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
-    
-    # return render_to_response('boilerplate/scatterStudent.html',context )
-
-
-# for experiment of chart js
-
-def home(request):
-    return render(request, '/home/maaz/django-support1/web-app-data/demo/boilerplate/templates/boilerplate/home1.html')
-
-
-
-def population_chart(request):
-    data = pd.read_csv("/home/maaz/django-support1/web-app-data/demo/static/Year_7_EOT.csv")
-    
-    labels = list(data.columns[8:25])
-    data = data.iloc[165][8:15].values
+    labels = list(data.columns[8:15])
+    data = data.iloc[getIndex][8:15].values
     data = list(data.astype(float))
     name = 'Ana Sofia'
-    return JsonResponse(data={
+   
+    return render(request, 'boilerplate/scatterStudent.html', {
         'labels': labels,
         'data': data,
-        'text': name,
-        'barLabel': 'Quiz Score'
+        'studentName' : name #lablel title
     })
+
 
     
 
@@ -317,5 +258,6 @@ def question(request):
     # latest_demo_list = Demo.objects.all()
     # context = {'latest_demo_list': latest_demo_list}
     return render(request, 'boilerplate/examQuestion.html')
+
 
 

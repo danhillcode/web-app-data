@@ -1,16 +1,36 @@
 {% extends 'boilerplate/base.html' %}
 
-<!--scatter is a generic page that can be used to sort the graphs before complicating the app-->
-
-
-<!--{% load static %}-->
 {% block content %}
-{% load nvd3_tags %}
-<head>
-    {% load_chart charttype chartdata "multibarchart_container" %}
-</head>
-<body>
-    {% include_container "multibarchart_container" 400 600 %}
-</body>
-{% endblock %}
+<div id="container" style="width: 75%;">
+    <canvas id="bar-chart"></canvas>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+  <script>
+
+    var config = {
+      type: 'bar',
+      data: {
+        datasets: [{
+          data: {{ data|safe }},
+          backgroundColor: [
+            'blue'
+          ],
+          label: 'Qiuz Results'
+        }],
+        labels: {{ labels|safe }}
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('bar-chart').getContext('2d');
+      window.myPie = new Chart(ctx, config);
+    };
+
+  </script>
+
+
+{% endblock %}
