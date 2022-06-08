@@ -1,14 +1,15 @@
+from multiprocessing import context
 from wsgiref.util import FileWrapper
 
 from django.conf import settings
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render,redirect
+from django.http import HttpResponse, JsonResponse
 from .models import Demo
 import pandas as pd
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .forms import NameForm
-from django.shortcuts import render_to_response
+from .forms import NameForm , CreateUserForm
+# from django.shortcuts import render_to_response
 import numpy as np
 
 import random
@@ -19,6 +20,54 @@ import time
 This outlines the routes and is basically the controller where data
 is processed and can interact with the views
 '''
+
+# DJango User Authentication
+
+from django.contrib.auth.forms import UserCreationForm 
+from django.contrib import messages #error messages for form
+from django.contrib.auth import authenticate, login, logout
+
+
+#from registration form
+
+def registerPage(request):
+    form = CreateUserForm()
+    
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():            
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request,f'congratulations {user}, successfully registered') # flash message for successful user registration
+            return redirect('login') #redirecting to login page after form submission
+    
+    context = {'form':form}
+    return render(request,'registration/register.html',context)
+
+
+#data from login page form
+def loginPage(request):
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        #authenticating the request data
+        user = authenticate(request,username = username, password = password) 
+
+        #if user exists
+        if user is not None:
+            login(request,user)
+            return redirect('home')  
+
+    return render(request,'registration/login.html')
+
+def logoutUser(request):
+    return render(request,'registration/logged_out.html')
+    
+
+# def home(request):
+
 
 
 def index(request):
@@ -143,62 +192,74 @@ def demo_scatter(request):
             'jquery_on_ready': False,
         }
     }
-    return render_to_response('boilerplate/scatter.html', data)
+    return render('boilerplate/scatter.html', data)
+
 
 
 
 # Finding individual data - work in progress
+from django.http import HttpResponseNotFound
 def scatter_student(request):
 
-    # print("session value here:???")
-    # print(Demo.objects.all)
+    
+   
+    
+    # surnameFilter =  data['Surname']
+    # surnameFilter = surnameFilter.str.replace(" ","")
+    # surnameFilter.str.lower()
 
-    data = pd.read_csv("/Users/danielhill/PycharmProjects/web-app-data/demo/static/Year_7_EOT.csv")
-    #name is data but didnt change name1 is actual name
-    name = np.array(data[0:1])
-    df = pd.DataFrame(data)
+    
+    # name = request.POST['your_name'].replace(" ","")
+    # name.lower()
+    # surname = request.POST['surname'].replace(" ","")    
+    # surname.lower()
+    
+    
+    
+    
+    data = pd.read_csv("/home/maaz/django-support1/web-app-data/demo/static/Year_7_EOT.csv")
+    print(request.POST['your_name'])
+    # If name exists in csv
+    nameFilter = data['Name'] #copy Name column
+    nameFilter = nameFilter.str.replace(" ","") #removing spaces in last
+    nameFilter.str.lower() #to lowercase
+    
+    name = request.POST['your_name'].replace(" ","")
+    name.lower()
+    
+    # #if the name is in request
+    if name not in nameFilter.unique():
+        return HttpResponseNotFound("Student not found")
+        # return JsonResponse({'message':"Does not exist"})
 
-    columnTitles = df.columns[8:25]
-    print(df.columns[8:18])
-    # dataSet = np.array(data[0:1])
+    # #get index of the requested name
+    n = nameFilter[nameFilter == name].index
+    getIndex = np.array(n)
+    getIndex = getIndex[0]
+    
+    
+    
+    labels = list(data.columns[8:]) #col titles
+    score = data.iloc[getIndex][8:].values #qioz scores
+    score = list(score.astype(float)) #converting str to float
+    name = [data['Name'][getIndex]] #name of requeseted student
 
-
-
-
-
-    name1 = name[0]
-    data = name[0][8:28]
-
-    # Need to find a way to go across and access all of the scores for one student
-    score = np.array(name[0][8:25]).tolist()
-
-
-    chartdata = {'x':columnTitles , 'y': score}
-    charttype = "multiBarHorizontalChart"
-    chartcontainer = 'piechart_container'
-    # charttype = "discreteBarChart"
-    # chartcontainer = 'multiBarChart'
-    data = {
-        'charttype': charttype,
-        'chartdata': chartdata,
-        # 'chartcontainer': chartcontainer,
-        'extra': {
-            'x_is_date': False,
-            'x_axis_format': '',
-            'tag_script_js': True,
-            'jquery_on_ready': False,
-        }
+    
+    dataset = {
+        'labels': labels,
+        'data': score,
+        'studentName' : name #lablel title
     }
-    return render_to_response('boilerplate/scatterStudent.html',data )
+
+    return render(request, 'boilerplate/scatterStudent.html',dataset)
 
 
-
-
-
+    
 
 def question(request):
     # latest_demo_list = Demo.objects.all()
     # context = {'latest_demo_list': latest_demo_list}
     return render(request, 'boilerplate/examQuestion.html')
+
 
 

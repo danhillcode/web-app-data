@@ -3,6 +3,10 @@ from django.urls import path
 from . import views
 from django.views.generic.base import TemplateView # new
 
+
+# from .views import line_chart, line_chart_json
+
+
 # indexs for html pages linked to methods views. something
 urlpatterns = [
     path('', views.index, name='index'),
@@ -13,6 +17,12 @@ urlpatterns = [
     path('question/', views.question, name='question'),
 
     # path('tester/', views.test, name='test'),
-    path('/login', TemplateView.as_view(template_name='home.html'), name='home'),  # new
+    path('/login', TemplateView.as_view(template_name='home.html'), name='home'),  # new 
+
+    #Pths for registration and login/signup
+    path('register/', views.registerPage, name="register"),
+	path('login/', views.loginPage, name="login"),  
+	path('logout/', views.logoutUser, name="logout"),
+    path('',TemplateView.as_view(template_name='home.html'), name='home'), #Loggedin user or Dashboard
 
 ]

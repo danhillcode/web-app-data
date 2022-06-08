@@ -1,16 +1,42 @@
 {% extends 'boilerplate/base.html' %}
 
-<!--scatter is a generic page that can be used to sort the graphs before complicating the app-->
-
-
-<!--{% load static %}-->
 {% block content %}
-{% load nvd3_tags %}
-<head>
-    {% load_chart charttype chartdata "multibarchart_container" %}
-</head>
-<body>
-    {% include_container "multibarchart_container" 400 600 %}
-</body>
-{% endblock %}
+<!DOCTYPE html>
 
+<!-- Loading chart js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+<!-- drawing is done here -->
+<canvas id="myChart" style="width:100%;max-width:1000px"></canvas>
+
+<script>
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: {{labels|safe}}, //column titles
+    datasets: [{
+      label : "Quiz Score", //legend title
+      backgroundColor: 'blue', //bar color
+      data: {{data|safe}} //data
+    }]
+  },
+  options: {
+    legend: {display: true},
+    title: {
+      display: true,
+      text: 'Student : '+{{studentName|safe}}, //chart title
+    }
+  },
+  responsive: true,
+  maintainAspectRatio: true,
+            
+});
+</script>
+
+
+
+
+
+
+{% endblock %}
