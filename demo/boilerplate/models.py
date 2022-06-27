@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User # importing users   
-from django.db.models.deletion import CASCADE, DO_NOTHING 
+from django.db.models.deletion import CASCADE, DO_NOTHING
+from traitlets import default 
 
 
 class Demo(models.Model):
@@ -13,6 +14,7 @@ class Demo(models.Model):
 
 # Model for questions
 class Question(models.Model):
+    image = models.ImageField(upload_to='static/images',blank = True,null = True)
     title = models.CharField(max_length=500)
     
 
