@@ -1,18 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title> Exam question </title>
-</head>
-<body>
-<!--How do you enter a paragraph for a form in html?-->
-    <p> This is the exam question </p>
-    <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="W3Schools.com">
-    <form action="/action_page.php">
-      <label for="fname">First name:</label><br>
-      <input type="text" id="fname" name="fname" value="John"><br>
-      <input type="submit" value="Submit">
+{% extends 'boilerplate/base.html' %}
+
+{% block content %}
+
+  <div class="w-50 p-3" style="background-color: #eee;">
+
+    <div class="w-75 p-3" style="background-color: #eee;">  
+    
+      <!-- <img src="" height="" width="50%" class="card-img-top" alt="..."> -->
+      <img src="/home/maaz/Downloads" class="img-fluid" alt="Responsive image">  
+
+   
+    
+        
+        <form  method="post" action="">
+          {% csrf_token %}
+          
+          {% for question in q %}
+        <p> {{ question.title }} </p>
+          
+          
+          <input type="hidden" name="question" value="{{ question.id }}">
+          {% endfor %}
+          <div class="form-group">
+        <textarea type="text" class="form-control" name = "answer">  </textarea>    </div>
+      <button type="submit" class="btn btn-primary mb-2">Submit</button>
     </form>
 
-</body>
-</html>
+  </div>
+</div>  
+    
+{% endblock %}
+
+
+

@@ -4,7 +4,7 @@ from wsgiref.util import FileWrapper
 from django.conf import settings
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Demo
+
 import pandas as pd
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -20,12 +20,17 @@ import time
 This outlines the routes and is basically the controller where data
 is processed and can interact with the views
 '''
+# Import Models
+from .models import Demo,Question,Answer
+
+
 
 # DJango User Authentication
 
 from django.contrib.auth.forms import UserCreationForm 
 from django.contrib import messages #error messages for form
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 #from registration form
@@ -63,13 +68,14 @@ def loginPage(request):
     return render(request,'registration/login.html')
 
 def logoutUser(request):
-    return render(request,'registration/logged_out.html')
+    logout(request)
+    return render(request,'registration/login.html')
     
 
 # def home(request):
 
 
-
+# @login_required(login_url="login") #it will redirect unauthenticated url to login
 def index(request):
     latest_demo_list = Demo.objects.all()
     context = {'latest_demo_list': latest_demo_list}
@@ -255,11 +261,35 @@ def scatter_student(request):
 
 
     
-
+#this function handles question asked to a user
+@login_required(login_url="login") #it redirects to login page if not logged in
 def question(request):
-    # latest_demo_list = Demo.objects.all()
-    # context = {'latest_demo_list': latest_demo_list}
-    return render(request, 'boilerplate/examQuestion.html')
+
+    #this block return questions
+    if request.method == 'GET':
+        q = Question.objects.all()
+        context = {
+            'questions': q
+        }
+        return render(request, 'boilerplate/examQuestion.html',{'q':q})
+    
+    #this block saves answers to answer table
+    if request.method == 'POST':
+        data = {}
+        #answer
+        data['answer'] = request.POST.get('answer')
+        #user data
+        data['user'] = request.user 
+        #question id
+        data['question'] = request.POST.get('question')
+        #we need to save instance to answer model not just pk
+        question = Question.objects.get(pk=data['question'])
+        print(data['answer'],data['user'],)
+
+        answer = Answer(student = data['user'],answer = data['answer'],question = question)
+        answer.save()
+        return redirect('home')
+
 
 
 

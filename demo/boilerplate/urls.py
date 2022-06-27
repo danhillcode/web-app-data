@@ -17,7 +17,7 @@ urlpatterns = [
     path('question/', views.question, name='question'),
 
     # path('tester/', views.test, name='test'),
-    path('/login', TemplateView.as_view(template_name='home.html'), name='home'),  # new 
+    # path('/login', TemplateView.as_view(template_name='home.html'), name='home'),  # new 
 
     #Pths for registration and login/signup
     path('register/', views.registerPage, name="register"),

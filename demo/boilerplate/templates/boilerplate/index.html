@@ -27,6 +27,11 @@
     <input type="submit" value="Year Data Analysis" class="btn btn-dark">
 </form>
 
+<!-- It will be modified in a simple link which takes to a list of form -->
+<form action="question/" method="get">
+    <input type="submit" value=" Attempt Question " class="btn btn-primary btn-md active"  aria-pressed="true">
+    <!-- <a href="{% url 'question'%}?next={{request.path}}" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Attempt Question</a> -->
+</form>
 </div>
 {% endblock %}
 
