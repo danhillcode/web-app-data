@@ -1,23 +1,24 @@
 {% extends 'boilerplate/base.html' %}
+{% load static %}
 
 {% block content %}
-{% load static %}
 
   <div class="w-50 p-3" style="background-color: #eee;">
 
     <div class="w-75 p-3" style="background-color: #eee;">  
     
       <!-- <img src="" height="" width="50%" class="card-img-top" alt="..."> -->
-    <!-- loading image -->
-      {% for image in q %}  
-        <img alt="Question" src="{{ image.image.url }}">
+    
+      <!-- loading image -->
+      {% for q in question %}  
+      <img src="{{q.photo.url}}" alt="question photo" height="" width="50%" class="card-img-top">
       
       {% endfor %}
         <form  method="post" action="">
           {% csrf_token %}
           
-          {% for question in q %}
-        <p> {{ question.title }} </p>
+          {% for q in question %}
+        <p> {{ q.title }} </p>
           
           
           <input type="hidden" name="question" value="{{ question.id }}">

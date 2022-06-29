@@ -14,7 +14,7 @@ class Demo(models.Model):
 
 # Model for questions
 class Question(models.Model):
-    image = models.ImageField(upload_to='static/images',blank = True,null = True)
+    photo = models.ImageField(upload_to='images',blank = True,null = True)
     title = models.CharField(max_length=500)
     
 

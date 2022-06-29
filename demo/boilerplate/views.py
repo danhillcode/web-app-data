@@ -262,16 +262,17 @@ def scatter_student(request):
 
     
 #this function handles question asked to a user
-@login_required(login_url="login") #it redirects to login page if not logged in
+@login_required(login_url="home") #it redirects to login page if not logged in
 def question(request):
 
     #this block return questions
     if request.method == 'GET':
         q = Question.objects.all()
-        context = {
-            'questions': q
-        }
-        return render(request, 'boilerplate/examQuestion.html',{'q':q})
+        questionDict={"question":q}
+        # context = {
+        #     'questions': q
+        # }
+        return render(request, 'boilerplate/examQuestion.html',context=questionDict)
     
     #this block saves answers to answer table
     if request.method == 'POST':
